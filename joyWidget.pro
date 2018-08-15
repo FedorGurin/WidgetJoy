@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network xml
 CONFIG   +=debug_and_release
 CONFIG +=build_all
 CONFIG +=no_batch

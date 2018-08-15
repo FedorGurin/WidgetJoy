@@ -1,10 +1,39 @@
 #include "dispatcher.h"
 #include <QThread>
 #include <iostream>
-
+#include <QFile>
+#include <QApplication>
+#include <QDomElement>
 #define IP_UCVS "192.168.72.1"
 #define PORT_UCVS 9000
-Dispatcher::Dispatcher() {
+
+QString Dispatcher::readParamFromXMLFile(QString fileName,QString nameProg,QString nameAttrib)
+{
+    bool openFile=false;
+    QString tempName("");
+    QFile file(qApp->applicationDirPath()+"/"+fileName);
+    QDomDocument domDoc;
+    openFile = file.open(QIODevice::ReadOnly);
+    if(openFile==true)
+    {
+        bool readXML=false;
+        readXML=domDoc.setContent(&file,true);
+        if(readXML==true)
+        {
+            QDomElement ele1    = domDoc.firstChildElement("data");
+            QDomElement ele     = ele1.firstChildElement(nameProg);
+            QString tempName    = ele.attribute(nameAttrib,"");
+            return tempName;
+        }
+    }else
+        qDebug("ReadParamFromXMLFile: File not find=%s\n nameProg=%s\n nameAttrib=%s\n",qPrintable(fileName),qPrintable(nameProg),qPrintable(nameAttrib));
+
+    return tempName;
+}
+Dispatcher::Dispatcher()
+{
+
+    listIp.clear();
     connect(&dataTimer, SIGNAL(timeout()), this, SLOT(fillParams()));
     connect(&dataTimer, SIGNAL(timeout()), this, SLOT(checkStatus()));
     dataTimer.start(10);
@@ -17,7 +46,31 @@ Dispatcher::Dispatcher() {
     rud = controllersByType[JOYSTICK];
 
     connect(this, SIGNAL(paramsUpdated(TControllerParams)), this, SLOT(sendParams()));
+
+    readIpNodes();
 }
+void Dispatcher::readIpNodes()
+{
+    TIP_Node node;
+    QString valueIp="",valuePort="", numNode="NODE_";
+    int i = 0;
+    do
+    {
+        numNode = "NODE_" + QString::number(i);
+
+        valueIp     = readParamFromXMLFile("setting.xml",numNode,"IP");
+        valuePort   = readParamFromXMLFile("setting.xml",numNode,"PORT");
+        if(valueIp!="" && valuePort!="")
+        {
+            node.ip = valueIp;
+            node.port = valuePort.toInt();
+            listIp.push_back(node);
+        }
+
+        i++;
+    }while( valueIp!="" && valuePort!="");
+}
+
 void Dispatcher::setControllerType(ControllerType type)
 {
     rus = controllersByType[type];
@@ -72,6 +125,15 @@ void Dispatcher::fillParams() {
     emit paramsUpdated(_params);
 }
 
-void Dispatcher::sendParams() {
-    udpSocket.writeDatagram((char *)&_params, sizeof(TControllerParams), QHostAddress(IP_UCVS), PORT_UCVS);
+void Dispatcher::sendParams()
+{
+    if(listIp.isEmpty())
+        udpSocket.writeDatagram((char *)&_params, sizeof(TControllerParams), QHostAddress(IP_UCVS), PORT_UCVS);
+    else
+    {
+        for(int i = 0; i<listIp.size();i++)
+        {
+            udpSocket.writeDatagram((char *)&_params, sizeof(TControllerParams), QHostAddress(listIp[i].ip), listIp[i].port);
+        }
+    }
 }
