@@ -236,6 +236,16 @@ void Joystick::w_fillParams() {
     } else {
         rusWork = false;
     }
+
+    JOYINFO joyinfo2;
+    if(joyGetPos(JOYSTICKID2, &joyinfo2) == JOYERR_NOERROR) {
+        _params.rudParams.x = -(2 * joyinfo2.wXpos / 65535.0 - 1.0);
+        _params.rudParams.y = (2 * joyinfo2.wYpos / 65535.0 - 1.0);
+        _params.rudParams.z = (1.0 - 1.0 * joyinfo2.wZpos / 65535.0);
+        rudWork = true;
+    } else {
+        rudWork = false;
+    }
 }
 #endif
 #ifdef WIN32

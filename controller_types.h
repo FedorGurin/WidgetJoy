@@ -1,6 +1,7 @@
 #ifndef CONTROLLER_TYPES_H
 #define CONTROLLER_TYPES_H
 
+#include <stdint.h>
 enum ControllerType {
     KEYBOARD = 1,
     JOYSTICK = 2,
@@ -16,7 +17,7 @@ enum ThreeButtonPos {
 
 // Трех-позиционная кнопка
 typedef struct _TThreePosButton {
-    ThreeButtonPos pos;
+    uint32_t pos;
 } TThreePosButton;
 
 // Четырех-позиционная кнопка
@@ -34,17 +35,17 @@ typedef struct _TRUSParams {
     // axis: y - от себя(-)/на себя(+)
     float y;
     // button: Триггер
-    unsigned char trigger;
+    uint8_t trigger;
     // button: Триггер (сильное нажатие)
-    unsigned char trigger_strong;
+    uint8_t trigger_strong;
     // button
-    unsigned char wpn_rel;
+    uint8_t wpn_rel;
     // button
-    unsigned char nws;
+    uint8_t nws;
     // button
-    unsigned char bottom;
+    uint8_t bottom;
     // button: Временное отключение САУ (?)
-    unsigned char bottom_trigger;
+    uint8_t bottom_trigger;
     // button
     TFourPosButton trim;
     // button
@@ -56,6 +57,10 @@ typedef struct _TRUSParams {
 } TRUSParams;
 
 typedef struct _TRUDParams {
+    // axis: x - влево(-)/вправо(+)
+    float x;
+    // axis: y - от себя(-)/на себя(+)
+    float y;
     // axis: z - от себя(-)/на себя(+)
     float z;
     // axis: ant_elev
@@ -63,9 +68,9 @@ typedef struct _TRUDParams {
     // axis: man_rng
     float man_rng;
     // РУД:
-    unsigned char enable;
+    uint8_t enable;
     // РУД:
-    unsigned char uncage;
+    uint8_t uncage;
     // РУД:
     TThreePosButton dog_fight; // 3-х позиционная
     // РУД:
@@ -81,6 +86,8 @@ typedef struct _TControllerParams {
     TRUDParams rudParams;
 } TControllerParams;
 
+typedef TControllerParams params_t;
+
 
 /*
  * Те же параметры, но с битовыми полями для кнопок.
@@ -89,14 +96,14 @@ typedef struct _TControllerParams {
 typedef struct _TRUSParamsB {
     float x;
     float y;
-    unsigned buttons;
+    uint32_t buttons;
 } TRUSParamsB;
 
 typedef struct _TRUDParamsB {
     float z;
     float ant_elev;
     float man_rng;
-    unsigned buttons;
+    uint32_t buttons;
 } TRUDParamsB;
 
 typedef struct _TControllerParamsB {
