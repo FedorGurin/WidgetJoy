@@ -41,6 +41,17 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
     }else if(ev->key() == Qt::Key_D)
     {
         emit keyPressId(3);
+    }else if(ev->key() == Qt::Key_Z)
+    {
+        emit keyPressId(4);
+    }
+    else if(ev->key() == Qt::Key_BracketRight)
+    {
+        emit keyPressId(6);
+    }
+    else if(ev->key() == Qt::Key_BracketLeft)
+    {
+        emit keyPressId(5);
     }
     }
     QMainWindow::keyPressEvent(ev);

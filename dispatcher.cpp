@@ -87,7 +87,7 @@ void Dispatcher::slotKey(int value)
 {
     _params.rusParams.x = 0.0;
     _params.rusParams.y = 0.0;
-    _params.rudParams.z = 0.0;
+    _params.rudParams.z = 0.4;
    if(value == 2)
         _params.rusParams.x = -1.0;
 
@@ -99,6 +99,9 @@ void Dispatcher::slotKey(int value)
 
    if(value == 1)
        _params.rusParams.y = 1.0;
+
+   if(value == 4)
+       _params.rudParams.z = 1.0;
 
 }
 

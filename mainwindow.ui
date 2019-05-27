@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>561</width>
-    <height>514</height>
+    <width>632</width>
+    <height>556</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -176,6 +176,25 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="text">
+           <string>N/A</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="ped_label">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>PED = </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="ped_value">
           <property name="text">
            <string>N/A</string>
           </property>
@@ -587,8 +606,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>561</width>
-     <height>21</height>
+     <width>632</width>
+     <height>20</height>
     </rect>
    </property>
   </widget>
