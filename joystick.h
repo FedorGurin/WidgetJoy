@@ -5,8 +5,8 @@
 
 #define NBTNS 28 // Максимальное число кнопок
 #define NAXES 7 // Максимальное число осей
-#define JOYNAME "Thrustmaster" // Имя джойстика
-#define JOYNAMELEN 12 // Длина ID-строки (имени) джойстика
+//#define JOYNAME "Thrustmaster" // Имя джойстика
+#define JOYNAMELEN 32 // Длина ID-строки (имени) джойстика
 
 /*
  * Джойстик Thrustmaster Hotas Cougar (РУС + РУД)
@@ -17,11 +17,12 @@ private:
     bool rusWork;
     // Статус РУД
     bool rudWork;
-    void checkStatus();
+    void checkStatus(std::string dev,std::string name,bool &oou, int& fd);
     TControllerParams _params;
     virtual void fillParams();
 #ifdef __linux__
-    void l_fillParams();
+    void l_fillParamsRus(int fd, bool& work);
+    void l_fillParamsRud(int fd, bool& work);
 #endif
 #ifdef WIN32
     void w_fillParams();
@@ -30,6 +31,9 @@ private:
 public:
     Joystick();
     ~Joystick();
+    int fdRus = 0; // joystick device file descriptor
+    int fdRud = 0 ;
+
     virtual QString name() { return "Thrustmaster"; }
     virtual bool rusStatus();
     virtual bool rudStatus();
