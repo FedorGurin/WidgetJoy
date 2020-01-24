@@ -17,7 +17,7 @@ private:
     bool rusWork;
     // Статус РУД
     bool rudWork;
-    void checkStatus();
+    void checkStatus(std::string name,bool &oou int fd);
     TControllerParams _params;
     virtual void fillParams();
 #ifdef __linux__
@@ -30,6 +30,9 @@ private:
 public:
     Joystick();
     ~Joystick();
+    int fdRus = 0; // joystick device file descriptor
+    int fdRud = 0 ;
+
     virtual QString name() { return "Thrustmaster"; }
     virtual bool rusStatus();
     virtual bool rudStatus();

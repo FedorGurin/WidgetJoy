@@ -12,7 +12,9 @@
 // Разработка велась с использованием ядра 3.13, в более новых версиях ядра интерфейс может поменяться.
 #include <linux/joystick.h>
 
-int fd = 0; // joystick device file descriptor
+//int fdRus = 0; // joystick device file descriptor
+//int fdRud = 0 ;
+//int fd    = 0;
 
 #endif
 
@@ -28,22 +30,24 @@ Joystick::Joystick() {
 Joystick::~Joystick() {
 #ifdef __linux__
     if (fd > 0) close(fd);
+    if (fdRus > 0 ) close (fdRus);
+    if (fdRud > 0 ) close (fdRud);
 #endif
 }
 
 bool Joystick::rusStatus() {
-    checkStatus();
+    checkStatus("Thustmaster",rusWork,fdRus);
     return rusWork;
 }
 
 bool Joystick::rudStatus() {
-    checkStatus();
+    checkStatus("Thrustmaster",rudWork,fdRud);
     return rudWork;
 }
 
-void Joystick::checkStatus() {
+void Joystick::checkStatus(std::string name, bool& oou,int fd) {
 #ifdef __linux__
-    if (!rusWork) {
+    if (!oou) {
         glob_t m;
         int code;
         // Ищем все джойстики и выбираем среди них Thrustmaster
@@ -59,13 +63,15 @@ void Joystick::checkStatus() {
                         id_string[JOYNAMELEN] = '\0';
                     }
                     // Джойстик подключен, но не Thrustmaster
-                    if (strcmp(id_string, JOYNAME)) {
+                    if (strcmp(id_string, name.c_str())) {
+                       oou = false;
                         close(fd);
                     } else {
-                        rusWork = true;
+
+                        oou = true;
                     }
                     delete id_string;
-                    if (rusWork) break;
+                    if (oou) break;
                 }
             }
         } else {
@@ -74,14 +80,14 @@ void Joystick::checkStatus() {
             }
         }
         globfree(&m);
-    } else if (!rudWork) {
-        char naxes, nbuttons;
+    } /*else if (!rudWork) {
+        /*char naxes, nbuttons;
         ioctl(fd, JSIOCGAXES, &naxes);
         ioctl(fd, JSIOCGBUTTONS, &nbuttons);
         if (naxes == NAXES && nbuttons == NBTNS) {
             rudWork = true;
-        }
-    }
+        }*/
+    }*/
 #endif
 }
 

@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui network xml
-CONFIG   +=debug_and_release
+CONFIG   +=debug
 CONFIG +=build_all
 CONFIG +=no_batch
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
