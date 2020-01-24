@@ -228,7 +228,7 @@ void Joystick::l_fillParams() {
 #ifdef WIN32
 void Joystick::w_fillParams() {
     JOYINFO joyinfo;
-    if(joyGetPos(JOYSTICKID1, &joyinfo) == JOYERR_NOERROR) {
+    if(joyGetPos(JOYSTICKID2, &joyinfo) == JOYERR_NOERROR) {
         _params.rusParams.x = -(2 * joyinfo.wXpos / 65535.0 - 1.0);
         _params.rusParams.y = (2 * joyinfo.wYpos / 65535.0 - 1.0);
         _params.rudParams.z = (1.0 - 1.0 * joyinfo.wZpos / 65535.0);
@@ -238,7 +238,7 @@ void Joystick::w_fillParams() {
     }
 
     JOYINFO joyinfo2;
-    if(joyGetPos(JOYSTICKID2, &joyinfo2) == JOYERR_NOERROR) {
+    if(joyGetPos(JOYSTICKID1, &joyinfo2) == JOYERR_NOERROR) {
         _params.rudParams.x = -(2 * joyinfo2.wXpos / 65535.0 - 1.0);
         _params.rudParams.y = (2 * joyinfo2.wYpos / 65535.0 - 1.0);
         _params.rudParams.z = (1.0 - 1.0 * joyinfo2.wZpos / 65535.0);
