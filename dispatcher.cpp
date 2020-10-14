@@ -44,6 +44,7 @@ Dispatcher::Dispatcher()
 
     rus = controllersByType[JOYSTICK];
     rud = controllersByType[JOYSTICK];
+    ped = controllersByType[JOYSTICK];
 
     connect(this, SIGNAL(paramsUpdated(TControllerParams)), this, SLOT(sendParams()));
 
@@ -75,6 +76,7 @@ void Dispatcher::setControllerType(ControllerType type)
 {
     rus = controllersByType[type];
     rud = controllersByType[type];
+    ped = controllersByType[type];
 }
 void Dispatcher::setKeyboard(bool on)
 {
@@ -116,6 +118,7 @@ void Dispatcher::checkStatus() {
     for (auto it = controllersByType.begin(); it != controllersByType.end(); it++) {
         bool rusS = it.value()->rusStatus();
         bool rudS = it.value()->rudStatus();
+        bool pedS = it.value()->pedStatus();
         statuses[it.key()] = QPair<bool, bool>(rusS, rudS);
     }
     emit statusUpdated(statuses);
@@ -125,6 +128,7 @@ void Dispatcher::fillParams() {
 //    std::cout << "Dispatcher: " << QThread::currentThreadId() << std::endl;
     rus->fillRUSParams(_params.rusParams);
     rud->fillRUDParams(_params.rudParams);
+    ped->fillPEDParams(_params.pedParams);
     emit paramsUpdated(_params);
 }
 

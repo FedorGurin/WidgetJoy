@@ -55,7 +55,12 @@ typedef struct _TRUSParams {
     // button
     TFourPosButton thumb;
 } TRUSParams;
-
+typedef struct _TPEDParams {
+    // axis: x - влево(-)/вправо(+)
+    float x;
+    float y;
+    float z;
+}TPEDParams;
 typedef struct _TRUDParams {
 //    // axis: x - влево(-)/вправо(+)
 //    float x;
@@ -84,6 +89,7 @@ typedef struct _TRUDParams {
 typedef struct _TControllerParams {
     TRUSParams rusParams;
     TRUDParams rudParams;
+    TPEDParams pedParams;
 } TControllerParams;
 
 typedef TControllerParams params_t;
