@@ -23,8 +23,8 @@
 #endif
 
 Joystick::Joystick() {
-    rusWork = rudWork = false;
-    fdRus   = fdRud   = 0;
+    rusWork = rudWork = pedWork = false;
+    fdRus   = fdRud   = fdPed = 0;
     memset((void*)&_params,0,sizeof(_params));
 }
 
@@ -33,6 +33,7 @@ Joystick::~Joystick() {
     //if (fd > 0) close(fd);
     if (fdRus > 0 ) close (fdRus);
     if (fdRud > 0 ) close (fdRud);
+    if (fdPed > 0 ) close (fdPed);
 #endif
 }
 
@@ -45,7 +46,10 @@ bool Joystick::rudStatus() {
     checkStatus("/dev/input/js1", "Thrustmaster",rudWork,fdRud);
     return rudWork;
 }
-
+bool Joystick::pedStatus() {
+    checkStatus("/dev/input/js2", "Thrustmaster",pedWork,fdPed);
+    return pedWork;
+}
 void Joystick::checkStatus(std::string dev,std::string name, bool& oou,int& fd) {
 #ifdef __linux__
     char id_string[JOYNAMELEN];
@@ -84,7 +88,10 @@ void Joystick::fillRUSParams(TRUSParams &p) {
     fillParams();
     p = _params.rusParams;
 }
-
+void Joystick::fillPEDParams(TPEDParams &p) {
+    fillParams();
+    p = _params.pedParams;
+}
 void Joystick::fillRUDParams(TRUDParams &p) {
     fillParams();
     p = _params.rudParams;
@@ -96,6 +103,7 @@ void Joystick::fillParams() {
 #ifdef __linux__
     l_fillParamsRus(fdRus, rusWork);
     l_fillParamsRud(fdRud, rudWork);
+    l_fillParamsPed(fdPed, pedWork);
 #endif
 #ifdef WIN32
     w_fillParams();
@@ -308,6 +316,94 @@ void Joystick::l_fillParamsRus(int fd,bool &work) {
             if (fd) close(fd);
             work = false;
             checkStatus("/dev/input/js0","Thustmaster ",work,fdRus);
+        } else {
+            qCritical("Error number: %d", errno);
+        }
+    }
+}
+void Joystick::l_fillParamsPed(int fd,bool &work) {
+    if (!work) return;
+    // считываем данные и обрабатываем их, пока они есть (файл открыт в неблокирующем режиме)
+    errno = 0;
+    struct js_event e;
+    while (read(fd, &e, sizeof(struct js_event)) > 0) {
+        /*
+         * Маппинг изменений параметров джойстика на структуру с параметрами
+         * Протестировать нажатие кнопок и движение осей на линуксе
+         * можно при помощи утилиты jstest из пакета joystick
+         */
+        switch(e.type & ~JS_EVENT_INIT) {
+        case JS_EVENT_BUTTON:
+            switch (e.number) {
+            /* РУС */
+//            case 0: /* trigger */ _params.rusParams.trigger = e.value; break;
+//            case 1: /* wpn_rel */ _params.rusParams.wpn_rel = e.value; break;
+//            case 2: /* bottom */ _params.rusParams.bottom = e.value; break;
+//            case 3: /* bottom_trigger */ _params.rusParams.bottom_trigger = e.value; break;
+//            case 4: /* nws */ _params.rusParams.nws= e.value; break;
+//            case 5: /* trigger strong */ _params.rusParams.trigger_strong = e.value; break;
+//            /* 4-pos left */
+//            case 6: /* 4pos left up */ _params.rusParams.bottomleft.vpos = e.value ? UP : CENTER; break;
+//            case 7: /* 4pos left right */ _params.rusParams.bottomleft.hpos = e.value ? DOWN : CENTER; break;
+//            case 8: /* 4pos left down */ _params.rusParams.bottomleft.vpos = e.value ? DOWN : CENTER; break;
+//            case 9: /* 4pos left left */ _params.rusParams.bottomleft.hpos  = e.value ? UP: CENTER; break;
+//            /* 4-pos right */
+//            case 10: /* 4pos right up */ _params.rusParams.bottomright.vpos = e.value ? UP : CENTER; break;
+//            case 11: /* 4pos right right */ _params.rusParams.bottomright.hpos = e.value ? DOWN : CENTER; break;
+//            case 12: /* 4pos right down */ _params.rusParams.bottomright.vpos = e.value ? DOWN : CENTER; break;
+//            case 13: /* 4pos right left */ _params.rusParams.bottomright.hpos = e.value ? UP : CENTER; break;
+//            /* 4-pos thumb */
+//            case 14: /* 4pos thumb up */ _params.rusParams.thumb.vpos = e.value ? UP : CENTER; break;
+//            case 15: /* 4pos thumb right */ _params.rusParams.thumb.hpos = e.value ? DOWN : CENTER; break;
+//            case 16: /* 4pos thumb down */ _params.rusParams.thumb.vpos = e.value ? DOWN : CENTER; break;
+//            case 17: /* 4pos thumb left */ _params.rusParams.thumb.hpos = e.value ? UP : CENTER; break;
+            /* РУД */
+//            case 18: /* enable */ _params.rudParams.enable = e.value; break;
+//            /* 4-pos (v|u)hf + iff in/out */
+//            case 19: /* vhf */ _params.rudParams.vuhf_iff.vpos= e.value ? UP : CENTER; break;
+//            case 20: /* uhf */ _params.rudParams.vuhf_iff.vpos= e.value ? DOWN : CENTER; break;
+//            case 21: /* iff in */ _params.rudParams.vuhf_iff.hpos= e.value ? DOWN : CENTER; break;
+//            case 22: /* iff out */ _params.rudParams.vuhf_iff.hpos= e.value ? UP : CENTER; break;
+//            case 23: /* uncage */ _params.rudParams.uncage = e.value; break;
+//            /* 3-pos dog fight */
+//            case 24: /* down*/ _params.rudParams.dog_fight.pos = e.value ? DOWN : CENTER; break;
+//            case 25: /* up */ _params.rudParams.dog_fight.pos = e.value ? UP : CENTER; break;
+//            /* 3-pos spd brk */
+//            case 26: /* down */ _params.rudParams.spd_brk.pos = e.value ? DOWN : CENTER; break;
+//            case 27: /* up */ _params.rudParams.spd_brk.pos = e.value ? UP : CENTER; break;
+            default:
+                break;
+            }
+            break;
+        case JS_EVENT_AXIS:
+            // 0 и 1 оси всегда оси РУС
+            switch (e.number) {
+            case 0: /* Х-ось РУС */
+                _params.pedParams.x = e.value / 32767.0;
+                break;
+            case 1: /* Y-ось РУС */
+                _params.pedParams.y = e.value / 32767.0;
+                break;
+            case 2: /* trim, если подключен РУД */
+                _params.pedParams.z = e.value / 32767.0;
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+    /*
+     * Все существующие события обработаны.
+     * Если события закончились, код ошибки будет EAGAIN (см. иерархию errno.h)
+     * В противном случае либо джойстик отключили, либо что-то еще пошло не так.
+     */
+    // EAGAIN - конец данных в неблокирующем режиме
+    if (errno != EAGAIN) {
+        if (errno == ENODEV) { // no such device error - joystick unplugged or RUD plugged
+            if (fd) close(fd);
+            work = false;
+            checkStatus("/dev/input/js1","Thustmaster ",work,fdPed);
         } else {
             qCritical("Error number: %d", errno);
         }

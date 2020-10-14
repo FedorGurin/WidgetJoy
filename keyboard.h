@@ -9,8 +9,11 @@ public:
     virtual QString name() { return "Keyboard"; }
     virtual bool rusStatus() { return true; }
     virtual bool rudStatus() { return true; }
+    virtual bool pedStatus() { return true; }
+
     virtual void fillRUSParams(TRUSParams&);
     virtual void fillRUDParams(TRUDParams&);
+    virtual void fillPEDParams(TPEDParams&);
 };
 
 #endif // KEYBOARD_H

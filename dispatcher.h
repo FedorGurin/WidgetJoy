@@ -40,6 +40,8 @@ private:
     QUdpSocket udpSocket;
     Controller *rus; // current RUS controller
     Controller *rud; // current RUD controller
+    Controller *ped; // current RUD controller
+
     QHash<ControllerType, Controller *> controllersByType;
     QVector <TIP_Node> listIp;
 };
