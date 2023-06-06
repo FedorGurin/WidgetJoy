@@ -4,11 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network xml
+QT       += core gui network xml widgets gamepad
 CONFIG   +=debug
 CONFIG +=build_all
 CONFIG +=no_batch
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 
 #QMAKE_CXXFLAGS += -std=c++11
 

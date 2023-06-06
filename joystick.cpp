@@ -1,5 +1,6 @@
 #include "joystick.h"
-
+#include <QGamepad>
+#include <QtGlobal>
 // Необходимы хэдеры для работы с джойстиком на линуксе
 #ifdef __linux__
 #include <fcntl.h>
@@ -413,21 +414,62 @@ void Joystick::l_fillParamsPed(int fd,bool &work) {
 
 #ifdef WIN32
 void Joystick::w_fillParams() {
-    JOYINFO joyinfo;
-    if(joyGetPos(JOYSTICKID1, &joyinfo) == JOYERR_NOERROR) {
-        _params.rusParams.x = -(2 * joyinfo.wXpos / 65535.0 - 1.0);
-        _params.rusParams.y = (2 * joyinfo.wYpos / 65535.0 - 1.0);
-        _params.rudParams.z = (1.0 - 1.0 * joyinfo.wZpos / 65535.0);
+
+
+    if(gamepad.isConnected() == true)
+    {
+        pedWork = true;
         rusWork = true;
-    } else {
-        rusWork = false;
+
+        _params.rusParams.x = gamepad.axisRightX();
+        _params.rusParams.y = gamepad.axisRightY();
+
+        _params.pedParams.x = gamepad.axisLeftX();
+        _params.pedParams.y = gamepad.axisLeftY();
+
+        bool left = gamepad.buttonLeft();
+        bool right = gamepad.buttonRight();
+
+        //if(gamepad.buttonL2() == true)
+        //    _params.rudParams.z += 0.005;
+        //else if(gamepad.buttonL2() == true)
+            //_params.rudParams.z -=0.005;
+                _params.rudParams.z =gamepad.buttonL2();
+
+        _params.rudParams.z = qBound(0.0f,_params.rudParams.z,1.0f);
+
+
+        //_params.rudParams.z = gamepad.buttonR1();
+        rusWork = true;
+        return;
     }
+
+
+        JOYINFO joyinfo;
+        if(joyGetPos(JOYSTICKID1, &joyinfo) == JOYERR_NOERROR) {
+            _params.rusParams.x = -(2 * joyinfo.wXpos / 65535.0 - 1.0);
+            _params.rusParams.y = (2 * joyinfo.wXpos / 65535.0 - 1.0);
+            _params.rudParams.z = (1.0 - 1.0 * joyinfo.wXpos / 65535.0);
+            rusWork = true;
+        } else {
+            rusWork = false;
+        }
+
+//    JOYINFO joyinfo;
+//    if(joyGetPos(JOYSTICKID1, &joyinfo) == JOYERR_NOERROR) {
+//        _params.rusParams.x = -(2 * joyinfo.wXpos / 65535.0 - 1.0);
+//        _params.rusParams.y = (2 * joyinfo.wYpos / 65535.0 - 1.0);
+//        _params.rudParams.z = (1.0 - 1.0 * joyinfo.wZpos / 65535.0);
+//        rusWork = true;
+//    } else {
+//        rusWork = false;
+//    }
 
     JOYINFO joyinfo2;
     if(joyGetPos(JOYSTICKID2, &joyinfo2) == JOYERR_NOERROR) {
         //_params.rudParams.x = -(2 * joyinfo2.wXpos / 65535.0 - 1.0);
         //_params.rudParams.y = (2 * joyinfo2.wYpos / 65535.0 - 1.0);
-        _params.rudParams.z = (2.0 * joyinfo2.wZpos / 65535.0 - 1.0);
+        _params.rudParams.z = -(2.0 * joyinfo2.wZpos / 65535.0 - 1.0);
         rudWork = true;
     } else {
         rudWork = false;
@@ -437,9 +479,9 @@ void Joystick::w_fillParams() {
         _params.pedParams.x = -(2 * joyinfo2.wXpos / 65535.0 - 1.0);
         _params.pedParams.y = (2 * joyinfo2.wYpos / 65535.0 - 1.0);
         _params.pedParams.z = (1.0 - 1.0 * joyinfo2.wZpos / 65535.0 - 1.0);
-        rudWork = true;
+        pedWork = true;
     } else {
-        rudWork = false;
+        pedWork = false;
     }
 }
 #endif

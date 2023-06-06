@@ -62,10 +62,10 @@ typedef struct _TPEDParams {
     float z;
 }TPEDParams;
 typedef struct _TRUDParams {
-//    // axis: x - влево(-)/вправо(+)
-//    float x;
-//    // axis: y - от себя(-)/на себя(+)
-//    float y;
+    // axis: x - влево(-)/вправо(+)
+    float x;
+    // axis: y - от себя(-)/на себя(+)
+    float y;
     // axis: z - от себя(-)/на себя(+)
     float z;
     // axis: ant_elev

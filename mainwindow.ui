@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>632</width>
-    <height>556</height>
+    <width>1157</width>
+    <height>684</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -197,6 +197,20 @@
          <widget class="QLabel" name="ped_value">
           <property name="text">
            <string>N/A</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Площадки = </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="torm_value">
+          <property name="text">
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
@@ -606,7 +620,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>632</width>
+     <width>1157</width>
      <height>20</height>
     </rect>
    </property>

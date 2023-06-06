@@ -2,7 +2,7 @@
 #define JOYSTICK_H
 
 #include "controller.h"
-
+#include <QGamepad>
 #define NBTNS 28 // Максимальное число кнопок
 #define NAXES 7 // Максимальное число осей
 //#define JOYNAME "Thrustmaster" // Имя джойстика
@@ -13,6 +13,7 @@
  */
 class Joystick: public Controller {
 private:
+    QGamepad gamepad;
     // Статус РУС
     bool rusWork;
     // Статус РУД

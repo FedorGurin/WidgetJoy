@@ -67,8 +67,12 @@ void MainWindow::updateParams(const TControllerParams &p) {
 //    std::cout << "Main window: " << QThread::currentThreadId() << std::endl;
     // РУС
     TRUSParams rusParams = p.rusParams;
+    TPEDParams pedParams = p.pedParams;
     ui->x_value->setText(QString("%1").arg(rusParams.x));
     ui->y_value->setText(QString("%1").arg(rusParams.y));
+    ui->ped_value->setText(QString("%1").arg(pedParams.x));
+    ui->torm_value->setText(QString("%1").arg(pedParams.y));
+
     if (rusParams.trigger_strong) ui->rusButtonsTable->item(0, 1)->setText(QString("Зажата сильно"));
     else if (rusParams.trigger) ui->rusButtonsTable->item(0, 1)->setText(QString("Зажата"));
     else ui->rusButtonsTable->item(0, 1)->setText(QString("Отжата"));
