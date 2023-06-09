@@ -413,11 +413,14 @@ void Joystick::l_fillParamsPed(int fd,bool &work) {
 #endif
 
 #ifdef WIN32
+
+#define MISHA
 void Joystick::w_fillParams() {
 
 
     if(gamepad.isConnected() == true)
     {
+#ifndef MISHA
         pedWork = true;
         rusWork = true;
 
@@ -442,6 +445,21 @@ void Joystick::w_fillParams() {
         //_params.rudParams.z = gamepad.buttonR1();
         rusWork = true;
         return;
+#else
+        pedWork = true;
+        rusWork = true;
+
+        _params.rusParams.x = gamepad.axisLeftX();
+        _params.rusParams.y = gamepad.axisLeftY();
+
+        _params.pedParams.x = gamepad.axisRightX();
+        _params.pedParams.y = gamepad.axisRightY();
+        _params.rudParams.z = gamepad.buttonL2() - gamepad.buttonR2();
+        _params.rudParams.z = qBound(-1.0f,_params.rudParams.z,1.0f);
+         rusWork = true;
+        return;
+#endif
+
     }
 
 
