@@ -2,14 +2,15 @@
 #define CONTROLLER_TYPES_H
 
 #include <stdint.h>
-enum ControllerType {
+enum ControllerType:uint8_t {
     KEYBOARD = 1,
     JOYSTICK = 2,
+    GAMEPAD  = 3
 };
 
 // положение 3-х позиционной кнопки
 // только одно из трех положений
-enum ThreeButtonPos {
+enum ThreeButtonPos:uint8_t {
     CENTER = 0, // кнопка отжата
     UP = 1, // вверх или влево
     DOWN = 2, // вниз или вправо
@@ -17,7 +18,7 @@ enum ThreeButtonPos {
 
 // Трех-позиционная кнопка
 typedef struct _TThreePosButton {
-    uint32_t pos;
+    ThreeButtonPos pos;
 } TThreePosButton;
 
 // Четырех-позиционная кнопка

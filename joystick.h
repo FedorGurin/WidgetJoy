@@ -22,28 +22,25 @@ private:
     bool pedWork;
 
     void checkStatus(std::string dev,std::string name,bool &oou, int& fd);
+    //! параметры
     TControllerParams _params;
+    // заполнение параметров
     virtual void fillParams();
-#ifdef __linux__
-    void l_fillParamsRus(int fd, bool& work);
-    void l_fillParamsRud(int fd, bool& work);
-    void l_fillParamsPed(int fd, bool& work);
-#endif
-#ifdef WIN32
+
     void w_fillParams();
     void k_fillParams();
-#endif
+
 public:
     Joystick();
     ~Joystick();
-    int fdRus = 0; // joystick device file descriptor
+    int fdRus = 0;
     int fdRud = 0 ;
     int fdPed = 0;
 
     virtual QString name() { return "Thrustmaster"; }
-    virtual bool rusStatus();
-    virtual bool rudStatus();
-    virtual bool pedStatus();
+    virtual bool rusStatus(){return rusWork;}
+    virtual bool rudStatus(){return rudWork;}
+    virtual bool pedStatus(){return pedWork;}
 
     virtual void fillRUSParams(TRUSParams&);
     virtual void fillRUDParams(TRUDParams&);

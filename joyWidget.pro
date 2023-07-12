@@ -14,9 +14,7 @@ CONFIG +=no_batch
 
 TARGET = joyWidget
 TEMPLATE = app
-win32{
-LIBS +=winmm.lib
-}
+
 unix:DEFINES += LINUX_PLATFORM
 unix:DEFINES -=WINDOWS_PLATFORM
 
