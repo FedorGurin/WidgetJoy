@@ -35,13 +35,16 @@ void Joystick::w_fillParams()
         pedWork = true;
         rusWork = true;
 
-        _params.rusParams.x = gamepad.axisLeftX();
+        _params.rusParams.x = gamepad.axisLeftX();        
         _params.rusParams.y = gamepad.axisLeftY();
+
 
         _params.pedParams.x = gamepad.axisRightX();
         _params.pedParams.y = gamepad.axisRightY();
         _params.rudParams.z = gamepad.buttonL2() - gamepad.buttonR2();
         _params.rudParams.z = qBound(-1.0f,_params.rudParams.z,1.0f);
+        _params.rudParams.enable = gamepad.buttonX();
+        _params.rudParams.uncage = gamepad.buttonB();
 
         return;
     }
