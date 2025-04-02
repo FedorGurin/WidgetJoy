@@ -3,6 +3,10 @@
 #include <QtGlobal>
 
 
+#ifdef WIN32
+#include <Windows.h>
+#endif
+
 Joystick::Joystick() {
     rusWork = rudWork = pedWork = false;
     fdRus   = fdRud   = fdPed = 0;
@@ -30,6 +34,7 @@ void Joystick::fillParams() {
 }
 void Joystick::w_fillParams()
 {
+    int v = gamepad.deviceId();
     if(gamepad.isConnected() == true)
     {
         pedWork = true;
@@ -47,6 +52,23 @@ void Joystick::w_fillParams()
         _params.rudParams.uncage = gamepad.buttonB();
 
         return;
+    }else
+    {
+
+        JOYINFO joyinfo;
+        if(joyGetPos(JOYSTICKID1, &joyinfo) == JOYERR_NOERROR) {
+            _params.rusParams.x = -(2 * joyinfo.wXpos / 65535.0 - 1.0);
+            _params.rusParams.y = (2 * joyinfo.wYpos / 65535.0 - 1.0);
+            _params.rudParams.z = (1.0 - 1.0 * joyinfo.wZpos / 65535.0);
+            _params.rusParams.wpn_rel = (joyinfo.wButtons&0x1)?1:0;
+            _params.rusParams.nws= (joyinfo.wButtons&0x2)?1:0;
+            _params.rusParams.thumb.hpos = (joyinfo.wButtons&0x4)?UP:CENTER;
+            if(_params.rusParams.thumb.hpos == CENTER)
+                _params.rusParams.thumb.hpos = (joyinfo.wButtons&0x8)?DOWN:CENTER;
+            rusWork = true;
+        } else {
+            rusWork = false;
+        }
     }
 
 }

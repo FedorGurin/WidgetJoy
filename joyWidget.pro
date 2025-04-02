@@ -20,6 +20,10 @@ unix:DEFINES -=WINDOWS_PLATFORM
 
 win32:DEFINES -= LINUX_PLATFORM
 win32:DEFINES += WINDOWS_PLATFORM
+TEMPLATE = app
+win32{
+LIBS +=winmm.lib
+}
 SOURCES += main.cpp\
         mainwindow.cpp \
     joystick.cpp \
