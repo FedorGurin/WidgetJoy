@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QApplication>
 #include <QDomElement>
-#define IP_UCVS "192.168.226.101"
+#define IP_UCVS "192.168.1.11"
 #define PORT_UCVS 9000
 
 QString Dispatcher::readParamFromXMLFile(QString fileName,QString nameProg,QString nameAttrib)
