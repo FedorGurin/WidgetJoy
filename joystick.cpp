@@ -8,6 +8,7 @@
 #endif
 
 Joystick::Joystick() {
+    gamepad.setDeviceId(1);
     rusWork = rudWork = pedWork = false;
     fdRus   = fdRud   = fdPed = 0;
     memset((void*)&_params,0,sizeof(_params));
@@ -35,6 +36,7 @@ void Joystick::fillParams() {
 void Joystick::w_fillParams()
 {
     int v = gamepad.deviceId();
+    QList<int> list = QGamepadManager::instance()->connectedGamepads();
     if(gamepad.isConnected() == true)
     {
         pedWork = true;
@@ -55,20 +57,41 @@ void Joystick::w_fillParams()
     }else
     {
 
-        JOYINFO joyinfo;
-        if(joyGetPos(JOYSTICKID1, &joyinfo) == JOYERR_NOERROR) {
-            _params.rusParams.x = -(2 * joyinfo.wXpos / 65535.0 - 1.0);
-            _params.rusParams.y = (2 * joyinfo.wYpos / 65535.0 - 1.0);
-            _params.rudParams.z = (1.0 - 1.0 * joyinfo.wZpos / 65535.0);
-            _params.rusParams.wpn_rel = (joyinfo.wButtons&0x1)?1:0;
-            _params.rusParams.nws= (joyinfo.wButtons&0x2)?1:0;
-            _params.rusParams.thumb.hpos = (joyinfo.wButtons&0x4)?UP:CENTER;
-            if(_params.rusParams.thumb.hpos == CENTER)
-                _params.rusParams.thumb.hpos = (joyinfo.wButtons&0x8)?DOWN:CENTER;
-            rusWork = true;
-        } else {
-            rusWork = false;
-        }
+        // JOYINFO joyinfo;
+        // if(joyGetPos(JOYSTICKID1, &joyinfo) == JOYERR_NOERROR) {
+        //     _params.rusParams.x = -(2 * joyinfo.wXpos / 65535.0 - 1.0);
+        //     _params.rusParams.y = (2 * joyinfo.wYpos / 65535.0 - 1.0);
+        //     _params.rudParams.z = (1.0 - 1.0 * joyinfo.wZpos / 65535.0);
+        //     _params.rusParams.wpn_rel = (joyinfo.wButtons&0x1)?1:0;
+        //     _params.rusParams.nws= (joyinfo.wButtons&0x2)?1:0;
+        //     _params.rusParams.thumb.hpos = (joyinfo.wButtons&0x4)?UP:CENTER;
+        //     if(_params.rusParams.thumb.hpos == CENTER)
+        //         _params.rusParams.thumb.hpos = (joyinfo.wButtons&0x8)?DOWN:CENTER;
+        //     rusWork = true;
+        // } else {
+        //     rusWork = false;
+        // }
+         JOYINFOEX joyinfoex;
+         if(joyGetPosEx(JOYSTICKID1, &joyinfoex) == JOYERR_NOERROR) {
+             _params.rusParams.x = -(2 * joyinfoex.dwXpos / 16384.0 - 1.0);
+             _params.rusParams.y = (2 * joyinfoex.dwYpos / 16384.0 - 1.0);  ;
+             _params.rudParams.z = (1.0 - 1.0 * joyinfoex.dwZpos/256.);
+             _params.pedParams.x =  (1.0 - 1.0 * joyinfoex.dwRpos/256.);
+             //_params.pedParams.x =  (1.0 - 1.0 * joyinfoex.dwRpos/127.);
+
+             _params.pedParams.z = joyinfoex.dwUpos;
+             _params.pedParams.y = joyinfoex.dwVpos ;
+
+             _params.rusParams.wpn_rel = (joyinfoex.dwButtons&0x1)?1:0;
+             _params.rusParams.nws= (joyinfoex.dwButtons&0x2)?1:0;
+             _params.rusParams.thumb.hpos = (joyinfoex.dwButtons&0x4)?UP:CENTER;
+             if(_params.rusParams.thumb.hpos == CENTER)
+                     _params.rusParams.thumb.hpos = (joyinfoex.dwButtons&0x8)?DOWN:CENTER;
+                rusWork = true;
+         } else {
+                 rusWork = false;
+             }
+
     }
 
 }
