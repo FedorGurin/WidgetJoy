@@ -118,4 +118,13 @@ typedef struct _TControllerParamsB {
     TRUDParamsB rud;
 } TControllerParamsB;
 
+typedef struct _TAxis
+{
+    float min;
+    float center;
+    float max;
+}TAxis;
+typedef struct _TMinMaxAxis{
+    TAxis axi[3];
+}TMinMaxAxis;
 #endif // CONTROLLER_TYPES_H

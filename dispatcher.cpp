@@ -49,6 +49,11 @@ Dispatcher::Dispatcher()
     connect(this, SIGNAL(paramsUpdated(TControllerParams)), this, SLOT(sendParams()));
 
     readIpNodes();
+    readAxis();
+
+    rus->setRUSMinMax(axisRus);
+    rud->setRUDMinMax(axisRud);
+    ped->setPEDMinMax(axisPed);
 }
 void Dispatcher::readIpNodes()
 {
@@ -71,7 +76,21 @@ void Dispatcher::readIpNodes()
         i++;
     }while( valueIp!="" && valuePort!="");
 }
+void Dispatcher::readAxis()
+{
+    axisRus.axi[0].center = readParamFromXMLFile("setting.xml","RUS","AXIS_X_CENTER").toFloat();
+    axisRus.axi[1].center = readParamFromXMLFile("setting.xml","RUS","AXIS_Y_CENTER").toFloat();
+    axisRus.axi[2].center = readParamFromXMLFile("setting.xml","RUS","AXIS_Z_CENTER").toFloat();
 
+    axisRud.axi[0].center = readParamFromXMLFile("setting.xml","RUD","AXIS_X_CENTER").toFloat();;
+    axisRud.axi[1].center = readParamFromXMLFile("setting.xml","RUD","AXIS_Y_CENTER").toFloat();;
+    axisRud.axi[2].center = readParamFromXMLFile("setting.xml","RUD","AXIS_Z_CENTER").toFloat();;
+
+    axisPed.axi[0].center = readParamFromXMLFile("setting.xml","PED","AXIS_X_CENTER").toFloat();;
+    axisPed.axi[1].center = readParamFromXMLFile("setting.xml","PED","AXIS_Y_CENTER").toFloat();;
+    axisPed.axi[2].center = readParamFromXMLFile("setting.xml","PED","AXIS_Z_CENTER").toFloat();;
+
+}
 void Dispatcher::setControllerType(ControllerType type)
 {
     rus = controllersByType[type];

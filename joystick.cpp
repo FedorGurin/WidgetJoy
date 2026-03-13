@@ -28,7 +28,18 @@ void Joystick::fillRUDParams(TRUDParams &p) {
     fillParams();
     p = _params.rudParams;
 }
-
+void Joystick::setRUSMinMax(TMinMaxAxis &p)
+{
+    rusMinMax = p;
+}
+void Joystick::setRUDMinMax(TMinMaxAxis &p)
+{
+    rudMinMax = p;
+}
+void Joystick::setPEDMinMax(TMinMaxAxis &p)
+{
+    pedMinMax = p;
+}
 void Joystick::fillParams() {
     w_fillParams();
     k_fillParams();
@@ -73,14 +84,14 @@ void Joystick::w_fillParams()
         // }
          JOYINFOEX joyinfoex;
          if(joyGetPosEx(JOYSTICKID1, &joyinfoex) == JOYERR_NOERROR) {
-             _params.rusParams.x = -(2 * joyinfoex.dwXpos / 16384.0 - 1.0);
-             _params.rusParams.y = (2 * joyinfoex.dwYpos / 16384.0 - 1.0);  ;
-             _params.rudParams.z = (1.0 - 1.0 * joyinfoex.dwZpos/256.);
-             _params.pedParams.x =  (1.0 - 1.0 * joyinfoex.dwRpos/256.);
-             //_params.pedParams.x =  (1.0 - 1.0 * joyinfoex.dwRpos/127.);
+             _params.rusParams.x = -(2 * joyinfoex.dwXpos / rusMinMax.axi[0].center - 1.0);
+             _params.rusParams.y = (2 * joyinfoex.dwYpos / rusMinMax.axi[1].center - 1.0);
+             _params.rudParams.z = (1.0 - 1.0 * joyinfoex.dwZpos/rudMinMax.axi[0].center);
+             _params.pedParams.x =  -(2 * joyinfoex.dwRpos / pedMinMax.axi[0].center - 1.0);//(1.0 - 1.0 * joyinfoex.dwRpos/pedMinMax.axi[0].center);
+             _params.pedParams.y =  (1.0 - 1.0 * joyinfoex.dwUpos/pedMinMax.axi[1].center);
 
-             _params.pedParams.z = joyinfoex.dwUpos;
-             _params.pedParams.y = joyinfoex.dwVpos ;
+             //_params.pedParams.z = joyinfoex.dwUpos;
+             //S_params.pedParams.y = joyinfoex.dwVpos ;
 
              _params.rusParams.wpn_rel = (joyinfoex.dwButtons&0x1)?1:0;
              _params.rusParams.nws= (joyinfoex.dwButtons&0x2)?1:0;
@@ -88,9 +99,11 @@ void Joystick::w_fillParams()
              if(_params.rusParams.thumb.hpos == CENTER)
                      _params.rusParams.thumb.hpos = (joyinfoex.dwButtons&0x8)?DOWN:CENTER;
                 rusWork = true;
-         } else {
-                 rusWork = false;
-             }
+                pedWork = true;
+         }
+         else{
+                 //rusWork = false;
+         }
 
     }
 

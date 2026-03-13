@@ -15,6 +15,9 @@ public:
     virtual void fillRUSParams(TRUSParams&) = 0;
     virtual void fillRUDParams(TRUDParams&) = 0;
     virtual void fillPEDParams(TPEDParams&) = 0;
+    virtual void setRUSMinMax(TMinMaxAxis&) = 0;
+    virtual void setRUDMinMax(TMinMaxAxis&) = 0;
+    virtual void setPEDMinMax(TMinMaxAxis&) = 0;
     virtual bool rusStatus() = 0;
     virtual bool rudStatus() = 0;
     virtual bool pedStatus() = 0;

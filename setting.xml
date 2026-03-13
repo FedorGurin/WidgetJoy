@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <data>
   <NODE_1 IP="192.168.1.201" PORT="9000"/>  
-
+  <RUS AXIS_X_CENTER = "16384" AXIS_Y_CENTER="16384" AXIS_Z_CENTER="1"/>
+  <RUD AXIS_X_CENTER = "256" AXIS_Y_CENTER="1" AXIS_Z_CENTER="1"/>
+  <PED AXIS_X_CENTER = "256" AXIS_Y_CENTER="1" AXIS_Z_CENTER="1"/>
 </data>

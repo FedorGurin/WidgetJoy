@@ -14,6 +14,10 @@ public:
     virtual void fillRUSParams(TRUSParams&);
     virtual void fillRUDParams(TRUDParams&);
     virtual void fillPEDParams(TPEDParams&);
+
+    virtual void setRUSMinMax(TMinMaxAxis&);
+    virtual void setRUDMinMax(TMinMaxAxis&);
+    virtual void setPEDMinMax(TMinMaxAxis&);
 };
 
 #endif // KEYBOARD_H

@@ -27,6 +27,10 @@ private:
     // заполнение параметров
     virtual void fillParams();
 
+    TMinMaxAxis rusMinMax;
+    TMinMaxAxis rudMinMax;
+    TMinMaxAxis pedMinMax;
+
     void w_fillParams();
     void k_fillParams();
 
@@ -45,6 +49,10 @@ public:
     virtual void fillRUSParams(TRUSParams&);
     virtual void fillRUDParams(TRUDParams&);
     virtual void fillPEDParams(TPEDParams&);
+
+    virtual void setRUSMinMax(TMinMaxAxis&);
+    virtual void setRUDMinMax(TMinMaxAxis&);
+    virtual void setPEDMinMax(TMinMaxAxis&);
 };
 
 #endif // JOYSTICK_H

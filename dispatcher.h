@@ -33,6 +33,7 @@ private slots:
 private:
     //! чтение IP узлов
     void readIpNodes();
+    void readAxis();
     QString readParamFromXMLFile(QString fileName,QString nameProg,QString nameAttrib);
     TControllerParams _params;
     QTimer dataTimer;
@@ -44,6 +45,11 @@ private:
 
     QHash<ControllerType, Controller *> controllersByType;
     QVector <TIP_Node> listIp;
+
+    TMinMaxAxis axisRus;
+    TMinMaxAxis axisRud;
+    TMinMaxAxis axisPed;
+
 };
 
 #endif // DISPATCHER_H
